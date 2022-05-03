@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model apolices {
+  id_proposta               BigInt            @id
+  nm_razao_social           String?           @db.VarChar(50)
+  cd_processo_susep         BigInt?
+  nr_proposta               String?           @db.VarChar(25)
+  dt_proposta               DateTime?         @db.Date
+  dt_inicio_vigencia        DateTime?         @db.Date
+  dt_fim_vigencia           DateTime?         @db.Date
+  nm_segurado               String?           @db.VarChar(100)
+  nr_documento_segurado     String?           @db.VarChar(20)
+  nm_municipio_propriedade  String?           @db.VarChar(50)
+  sg_uf_propriedade         String?           @db.Char(2)
+  nm_classif_produto        String?           @db.VarChar(15)
+  nm_cultura_global         String?           @db.VarChar(15)
+  nr_area_total             Float?
+  nr_animal                 Float?
+  nr_produtividade_estimada Float?
+  nr_produtividade_segurada Float?
+  nivel_cobertura           Float?
+  vl_limite_garantia        Float?
+  vl_premio_liquido         Float?
+  pe_taxa                   Float?
+  vl_subvencao_federal      Float?
+  nr_apolice                String?           @db.VarChar(25)
+  dt_apolice                DateTime?         @db.Date
+  ano_apolice               Int?              @db.SmallInt
+  cd_geocmu                 BigInt?
+  valor_indenizacao         Float?
+  evento_preponderante      String?           @db.VarChar(35)
+  longitude                 Float?
+  latitude                  Float?
+  apolices_buffers          apolices_buffers?
+  apolices_pontos           apolices_pontos?
+}
+
+model apolices_buffers {
+  id_proposta BigInt                   @id
+  raio        Float?
+  geom        Unsupported("geometry")?
+  apolices    apolices                 @relation(fields: [id_proposta], references: [id_proposta], onDelete: NoAction, onUpdate: NoAction, map: "fk_apolices_buffers_apolices")
+
+  @@index([geom], map: "apolices_buffers_gix")
+}
+
+model apolices_pontos {
+  id_proposta BigInt                   @id
+  geom        Unsupported("geometry")?
+  apolices    apolices                 @relation(fields: [id_proposta], references: [id_proposta], onDelete: NoAction, onUpdate: NoAction, map: "fk_apolices_pontos_apolices")
+
+  @@index([geom], map: "apolices_pontos_gix")
+}
+
+model socioambientais {
+  id     Int                      @id @default(autoincrement())
+  gid    Int
+  tipo   String                   @db.VarChar(100)
+  nome   String                   @db.VarChar(255)
+  codigo Int
+  geom   Unsupported("geometry")?
+
+  @@index([geom], map: "IDX_308a63846a544b8d0365fb433b")
+}
+
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model terras_indigenas {
+  gid        Int                      @id @default(autoincrement())
+  ogid       Int?
+  terrai_cod Int?
+  terrai_nom String?                  @db.VarChar(254)
+  etnia_nome String?                  @db.VarChar(254)
+  municipio_ String?                  @db.VarChar(254)
+  uf_sigla   String?                  @db.VarChar(254)
+  superficie Decimal?                 @db.Decimal
+  fase_ti    String?                  @db.VarChar(254)
+  modalidade String?                  @db.VarChar(254)
+  reestudo_t String?                  @db.VarChar(254)
+  cr         String?                  @db.VarChar(254)
+  faixa_fron String?                  @db.VarChar(254)
+  undadm_cod Decimal?                 @db.Decimal
+  undadm_nom String?                  @db.VarChar(254)
+  undadm_sig String?                  @db.VarChar(254)
+  dominio_un String?                  @db.VarChar(254)
+  data_atual String?                  @db.VarChar(254)
+  epsg       Int?
+  geom       Unsupported("geometry")?
+
+  @@index([geom])
+}
+
+model trabalho_escravo {
+  id                     Int      @id @db.SmallInt
+  ano_acao_fiscal        Int      @db.SmallInt
+  uf                     String   @db.VarChar(2)
+  empregador             String   @db.VarChar(255)
+  cnpj_cpf               String   @db.VarChar(14)
+  estabelecimento        String   @db.VarChar(255)
+  trabalhadores          Int      @db.SmallInt
+  cnae                   String   @db.VarChar(7)
+  decisao_administrativa DateTime @db.Date
+  inclusao               DateTime @db.Date
+}
+
+model us_gaz {
+  id        Int     @id(map: "pk_us_gaz") @default(autoincrement())
+  seq       Int?
+  word      String?
+  stdword   String?
+  token     Int?
+  is_custom Boolean @default(true)
+}
+
+model us_lex {
+  id        Int     @id(map: "pk_us_lex") @default(autoincrement())
+  seq       Int?
+  word      String?
+  stdword   String?
+  token     Int?
+  is_custom Boolean @default(true)
+}
+
+model us_rules {
+  id        Int     @id(map: "pk_us_rules") @default(autoincrement())
+  rule      String?
+  is_custom Boolean @default(true)
+}
+
+model user {
+  id        Int    @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
+  firstName String @db.VarChar
+  lastName  String @db.VarChar
+  age       Int
+}
