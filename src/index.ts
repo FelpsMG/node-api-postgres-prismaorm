@@ -1,11 +1,11 @@
-import { port } from "./config"
-import app from "./app"
+import {port} from './configs/config';
+import app from './app';
 
-
-try{
-    app.listen(port)
-    console.log(`Express server has started on port ${port}. Open http://localhost:${port} to see results`)
+try {
+  app.listen(port);
+  console.log('Express server has started.');
+} catch {
+  error => {
+    console.log(error);
+  };
 }
-catch{(error) => {console.log(error)}}
-
-

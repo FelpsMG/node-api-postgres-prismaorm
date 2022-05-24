@@ -59,15 +59,171 @@ model apolices_pontos {
   @@index([geom], map: "apolices_pontos_gix")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model apolices_un {
+  nm_razao_social           String?   @db.VarChar(255)
+  cd_processo_susep         BigInt?
+  nr_proposta               String?   @db.VarChar(255)
+  id_proposta               BigInt?
+  dt_proposta               DateTime? @db.Date
+  dt_inicio_vigencia        DateTime? @db.Date
+  dt_fim_vigencia           DateTime? @db.Date
+  nm_segurado               String?   @db.VarChar(255)
+  nr_documento_segurado     String?   @db.VarChar(255)
+  nm_municipio_propriedade  String?   @db.VarChar(255)
+  sg_uf_propriedade         String?   @db.VarChar(255)
+  latitude                  String?   @db.VarChar(255)
+  nr_grau_lat               Decimal?  @db.Decimal
+  nr_min_lat                Decimal?  @db.Decimal
+  nr_seg_lat                Decimal?  @db.Decimal
+  longitude                 String?   @db.VarChar(255)
+  nr_grau_long              Decimal?  @db.Decimal
+  nr_min_long               Decimal?  @db.Decimal
+  nr_seg_long               Decimal?  @db.Decimal
+  nm_classif_produto        String?   @db.VarChar(255)
+  nm_cultura_global         String?   @db.VarChar(255)
+  nr_area_total             Decimal?  @db.Decimal
+  nr_animal                 Decimal?  @db.Decimal
+  nr_produtividade_estimada Decimal?  @db.Decimal
+  nr_produtividade_segurada Decimal?  @db.Decimal
+  nivel_cobertura           Decimal?  @db.Decimal
+  vl_limite_garantia        Decimal?  @db.Decimal
+  vl_premio_liquido         Decimal?  @db.Decimal
+  pe_taxa                   Decimal?  @db.Decimal
+  vl_subvencao_federal      Decimal?  @db.Decimal
+  nr_apolice                String?   @db.VarChar(255)
+  dt_apolice                DateTime? @db.Date
+  ano_apolice               Int?      @db.SmallInt
+  cd_geocmu                 BigInt?
+  valor_indenizacao         Decimal?  @db.Decimal
+  evento_preponderante      String?   @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model apolices_withPoints {
+  nm_razao_social           String?   @db.VarChar
+  cd_processo_susep         BigInt?
+  nr_proposta               String?   @db.VarChar
+  id_proposta               BigInt?
+  dt_proposta               DateTime? @db.Date
+  dt_inicio_vigencia        DateTime? @db.Date
+  dt_fim_vigencia           DateTime? @db.Date
+  nm_segurado               String?   @db.VarChar
+  nr_documento_segurado     String?   @db.VarChar
+  nm_municipio_propriedade  String?   @db.VarChar
+  sg_uf_propriedade         String?   @db.VarChar
+  nm_classif_produto        String?   @db.VarChar
+  nm_cultura_global         String?   @db.VarChar
+  nr_area_total             Float?
+  nr_animal                 Float?
+  nr_produtividade_estimada Float?
+  nr_produtividade_segurada Float?
+  nivel_cobertura           Float?
+  vl_limite_garantia        Float?
+  vl_premio_liquido         Float?
+  pe_taxa                   Float?
+  vl_subvencao_federal      Float?
+  nr_apolice                String?   @db.VarChar
+  dt_apolice                DateTime? @db.Date
+  ano_apolice               Int?      @db.SmallInt
+  cd_geocmu                 BigInt?
+  valor_indenizacao         Float?
+  evento_preponderante      String?   @db.VarChar
+  geom                      String?   @db.VarChar
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model apolices_withPolygons {
+  nm_razao_social           String?   @db.VarChar
+  cd_processo_susep         BigInt?
+  nr_proposta               String?   @db.VarChar
+  id_proposta               BigInt?
+  dt_proposta               DateTime? @db.Date
+  dt_inicio_vigencia        DateTime? @db.Date
+  dt_fim_vigencia           DateTime? @db.Date
+  nm_segurado               String?   @db.VarChar
+  nr_documento_segurado     String?   @db.VarChar
+  nm_municipio_propriedade  String?   @db.VarChar
+  sg_uf_propriedade         String?   @db.VarChar
+  nm_classif_produto        String?   @db.VarChar
+  nm_cultura_global         String?   @db.VarChar
+  nr_area_total             Float?
+  nr_animal                 Float?
+  nr_produtividade_estimada Float?
+  nr_produtividade_segurada Float?
+  nivel_cobertura           Float?
+  vl_limite_garantia        Float?
+  vl_premio_liquido         Float?
+  pe_taxa                   Float?
+  vl_subvencao_federal      Float?
+  nr_apolice                String?   @db.VarChar
+  dt_apolice                DateTime? @db.Date
+  ano_apolice               Int?      @db.SmallInt
+  cd_geocmu                 BigInt?
+  valor_indenizacao         Float?
+  evento_preponderante      String?   @db.VarChar
+  geom                      String?   @db.VarChar
+
+  @@ignore
+}
+
+model notes {
+  id        Int      @id @default(autoincrement())
+  text      String?  @db.VarChar
+  completed Boolean?
+}
+
 model socioambientais {
   id     Int                      @id @default(autoincrement())
-  gid    Int
-  tipo   String                   @db.VarChar(100)
-  nome   String                   @db.VarChar(255)
-  codigo Int
+  gid    Int?
+  tipo   String?                  @db.VarChar(100)
+  nome   String?                  @db.VarChar(255)
+  codigo Int?
   geom   Unsupported("geometry")?
 
-  @@index([geom], map: "IDX_308a63846a544b8d0365fb433b")
+  @@index([geom], map: "socioambientais_gix")
+  @@index([geom], map: "spatial_index_socioambiental")
+}
+
+model solos_ibge {
+  gid              Int                      @id @default(autoincrement())
+  id1              Float?
+  cd_fcim          String?                  @db.VarChar(4)
+  nom_unidad       String?                  @db.VarChar(60)
+  cod_simbol       String?                  @db.VarChar(20)
+  val_ncompo       Decimal?                 @db.Decimal
+  legenda          String?                  @db.VarChar(254)
+  ordem            String?                  @db.VarChar(100)
+  subordem         String?                  @db.VarChar(100)
+  grande_gru       String?                  @db.VarChar(100)
+  subgrupos        String?                  @db.VarChar(200)
+  textura          String?                  @db.VarChar(254)
+  horizonte        String?                  @db.VarChar(100)
+  erosao           String?                  @db.VarChar(100)
+  pedregosid       String?                  @db.VarChar(100)
+  rochosidad       String?                  @db.VarChar(100)
+  relevo           String?                  @db.VarChar(100)
+  componente       String?                  @db.VarChar(254)
+  component1       String?                  @db.VarChar(254)
+  component2       String?                  @db.VarChar(254)
+  component3       String?                  @db.VarChar(254)
+  inclu_p1         String?                  @db.VarChar(254)
+  inclu_p2         String?                  @db.VarChar(254)
+  inclu_p3         String?                  @db.VarChar(254)
+  ar_poli_km       Float?
+  leg_ordem        String?                  @db.VarChar(100)
+  legenda_2        String?                  @db.VarChar(201)
+  cd_ord_id        Decimal?                 @db.Decimal
+  cd_leg2_id       Decimal?                 @db.Decimal
+  geom             Unsupported("geometry")?
+  textura_sisdagro String?                  @db.VarChar(10)
+  textura_zarc     String?                  @db.VarChar(10)
+
+  @@index([geom])
 }
 
 model spatial_ref_sys {
@@ -76,6 +232,28 @@ model spatial_ref_sys {
   auth_srid Int?
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tabela_espectral {
+  id_proposta BigInt?
+  sigla_uf    String?   @db.VarChar(2)
+  x           Float?
+  y           Float?
+  nm_cultura  String?   @db.VarChar(50)
+  data_cena   DateTime? @db.Date
+  blue        Float?
+  red         Float?
+  nir         Float?
+  mir         Float?
+  ndvi        Float?
+  evi         Float?
+  ndwi        Float?
+  psri        Float?
+  qa          BigInt?
+  valida_qa   Boolean?
+
+  @@ignore
 }
 
 model terras_indigenas {
@@ -138,11 +316,4 @@ model us_rules {
   id        Int     @id(map: "pk_us_rules") @default(autoincrement())
   rule      String?
   is_custom Boolean @default(true)
-}
-
-model user {
-  id        Int    @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
-  firstName String @db.VarChar
-  lastName  String @db.VarChar
-  age       Int
 }

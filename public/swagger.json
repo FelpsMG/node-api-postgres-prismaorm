@@ -1,0 +1,284 @@
+{
+	"swagger": "3.0.0",
+	"openapi": "3.0.0",
+	"info": {
+		"description": "Documentação da api de disponibilização de serviços ao MAPA",
+		"version": "1.0.0",
+		"title": "Swagger MAPA-API",
+		"termsOfService": "termos de serviço aqui",
+		"contact": {
+			"email": "@ufsj.edu.br"
+		}
+	},
+	"host": "ourobranco.ufsj.edu.br:443",
+	"basePath": "/v1",
+	"tags": [
+		{
+			"name": "Endpoints funcionais",
+			"description": "Entrega da ficha de monitoramento por pdf e verificação de conformidade por ponto espacial.",
+			"externalDocs": {
+				"description": "",
+				"url": ""
+			}
+		}
+	],
+	"schemes": [
+		"dev",
+		"produção"
+	],
+	"paths": {
+		"/dev/api/conforme/point": {
+			"get": {
+				"tags": [
+					"Endpoints funcionais"
+				  ],
+				"summary": "Verifica ponto espacial",
+				"description":"Verifica se um determinado ponto espacial com SRID 4674, está inserido em alguma área socioambiental cadastrada",
+				"operationId": "read_policy_api_conforme_point_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": {
+							"title": "Longitude",
+							"type": "number"
+						},
+						"name": "longitude",
+						"in": "query"
+					},
+					{
+						"required": true,
+						"schema": {
+							"title": "Latitude",
+							"type": "number"
+						},
+						"name": "latitude",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"inconformidade": {
+													"properties":{
+														"nome":{
+															"type":"array",
+															"example":["Unidade X"]
+														},
+														"tipo":{
+															"type":"array",
+															"example":["Área de conservação"]
+														}
+													},
+													"type": "object"
+												}
+											}
+										},
+										{
+											"type": "object",
+											"properties": {
+												"conformidade": {
+													"type": "string",
+													"example": "conforme!"
+												}
+											}
+										}
+									]
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dev/api/conforme": {
+			"get": {
+				"tags": [
+					"Endpoints funcionais"
+				  ],
+				"summary": "Verifica conformidade com ponto espacial e trabalho escravo",
+				"description":"Verifica se um determinado ponto espacial com SRID 4674, está inserido em alguma área socioambiental cadastrada e verifica também se o cpf/cnpj informado está conforme coom processos de trabalho análogo à escravidão",
+				"operationId": "read_policy_api_conforme_point_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": {
+							"title": "Longitude",
+							"type": "number"
+						},
+						"name": "longitude",
+						"in": "query"
+					},
+					{
+						"required": true,
+						"schema": {
+							"title": "Latitude",
+							"type": "number"
+						},
+						"name": "latitude",
+						"in": "query"
+					},
+					{
+						"required": true,
+						"schema": {
+							"title": "Documento",
+							"type": "number"
+						},
+						"name": "documento",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"inconformidade": {
+													"properties":{
+														"nome":{
+															"type":"array",
+															"example":["Unidade X"]
+														},
+														"tipo":{
+															"type":"array",
+															"example":["Área de conservação"]
+														}
+													},
+													"type": "object"
+												}
+											}
+										},
+										{
+											"type": "object",
+											"properties": {
+												"conformidade": {
+													"type": "string",
+													"example": "conforme!"
+												}
+											}
+										}
+									]
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dev/api/apolice/report": {
+			"get": {
+				"tags": [
+					"Endpoints funcionais"
+				  ],
+				"summary": "Ficha de monitoramento",
+				"description":"A partir do identificador da apólice é entregue o pdf  da ficha de monitoramento.",
+				"operationId": "get_pdf_api_apolice_report_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": {
+							"title": "Id Proposta",
+							"type": "integer"
+						},
+						"name": "id_proposta",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/pdf": {
+								"schema": {}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"HTTPValidationError": {
+				"title": "HTTPValidationError",
+				"type": "object",
+				"properties": {
+					"detail": {
+						"title": "Detail",
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ValidationError"
+						}
+					}
+				}
+			},
+			"ValidationError": {
+				"title": "ValidationError",
+				"required": [
+					"loc",
+					"msg",
+					"type"
+				],
+				"type": "object",
+				"properties": {
+					"loc": {
+						"title": "Location",
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"msg": {
+						"title": "Message",
+						"type": "string"
+					},
+					"type": {
+						"title": "Error Type",
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
