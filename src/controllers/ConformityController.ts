@@ -1,14 +1,10 @@
-import {NextFunction, Request, Response} from 'express';
-import * as fs from 'fs';
+import {Request} from 'express';
 import {socioambientais} from '@prisma/client';
 import prisma from '../db/PrismaConn';
-import {reportsPath} from '../configs/config';
 
 export class ControllerPrisma {
   async findIntersections(
     request: Request,
-    response: Response,
-    next: NextFunction
   ) {
     const point = {
       type: 'Point',
@@ -37,8 +33,6 @@ export class ControllerPrisma {
 
   async verifyConformity(
     request: Request,
-    response: Response,
-    next: NextFunction
   ) {
     const point = {
       type: 'Point',

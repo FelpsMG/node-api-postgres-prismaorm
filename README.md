@@ -20,11 +20,11 @@ Para corrigir erros de formatação/estruturação encontrados ao longo do códi
 
 Para instalar o prisma
 `yarn add prisma --dev`
-`yarn prisma`
-`yarn prisma init`
+`yarn run prisma`
+`yarn run prisma init`
 `yarn add @prisma/client`
 
 
 Para atualizar os services do prisma com o banco de dados.
-`yarn prisma db pull`
-`yarn prisma generate`  
+`yarn run prisma db pull`
+`yarn run prisma generate`  

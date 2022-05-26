@@ -6,7 +6,7 @@ import morgan from 'morgan'; //HTTP request logger middleware for node.js
 import {validationResult} from 'express-validator'; //request validation
 import swaggerUi from 'swagger-ui-express';
 
-function handleError(err, _req, res, _next) {
+function handleError(err, _req, res) {
   res.status(err.statusCode || 500).send(err.message);
 }
 
@@ -30,7 +30,7 @@ Routes.forEach(route => {
   (app as any)[route.method](
     route.route,
     ...route.validation,
-    async (req: Request, res: Response, next: Function) => {
+    async (req: Request, res: Response, next) => {
       try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
