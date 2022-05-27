@@ -1,0 +1,80 @@
+stages:
+  - build
+  - test
+  - lint-test
+  - deploy
+
+image: node:latest
+
+build:
+  before_script:
+    - echo "PORT=8083" >> .env
+    - echo "DB_PROVIDER=postgresql" >> .env
+    - echo "DB_HOST=host.docker.internal" >> .env
+    - echo "DB_PORT=5432" >> .env
+    - echo "DB_USER=postgres" .env
+    - echo "DB_PASSWORD=super" >> .env
+    - echo "DB_DATABASE=postgres" >> .env
+    - echo "DB_URL=postgresql://postgres:postgres@host.docker.internal:5432/local_mapapg" >> .env
+    - echo "DATABASE_URL=postgresql://postgres:super@host.docker.internal:5432/postgres?schema=public" >> .env
+  tags:
+    - cap
+    - backend
+  stage: build
+  script:
+    - echo "Buildando aplicação..."
+    - yarn
+  cache:
+    key: "$CI_BUILD_REF_NAME"
+    policy: push
+    paths:
+      - node_modules
+      - yarn.lock
+  artifacts:
+    untracked: false
+    expire_in: 30 days
+    paths:
+      - node_modules
+      - yarn.lock
+      - .env
+test:
+  stage: test
+  dependencies:
+    - build
+  tags:
+    - cap
+    - backend
+  cache:
+    key: "$CI_BUILD_REF_NAME"
+    policy: pull
+    paths:
+      - node_modules
+      - yarn.lock
+  script:
+      - pwd
+      - cat .env
+      - yarn
+      - echo "Rodando testes..."
+      - yarn run prisma generate
+      - yarn run test --ignore-scripts
+
+lint-test:
+  tags:
+    - cap
+    - backend
+  stage: lint-test
+  allow_failure: true
+  script:
+    - yarn add gts
+    - yarn add lint 
+    - yarn run lint
+  
+
+deploy:
+  tags:
+    - cap
+    - backend
+  stage: deploy
+  script:
+    - echo "Realizando deploy"
+    - echo "deployed"
